@@ -1,10 +1,30 @@
 from flask import Flask,render_template,request
-
+import pandas as pd
+import pickle
+pipe = pickle.load(open("LRmodel.pkl",'rb'))
 app = Flask(__name__)
-
+data = pd.read_csv("cleaned_data.csv")
 @app.route('/')
 def index():
-    return render_template('index.html')
+
+    locations = sorted(data['location'].unique())
+    return render_template('index.html',locations=locations)
+
+@app.route('/predict',methods = ['POST'])
+def predict():
+    location = request. form.get('location')
+    bhk = request. form.get('BHK')
+
+    bath = request. form.get('Bath')
+
+    sqft =request.form.get('total_sqft')
+
+    print(location,bhk,bath,sqft)
+    input = pd.DataFrame([[location, sqft, bath, bhk]],columns=['location', 'total_sqft', 'bath', 'bhk'])
+
+    prediction = pipe.predict(input) [8]
+
+    return str(prediction)
 
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
