@@ -19,7 +19,7 @@
             <h1>Welcome to House Price Prediction 🙏</h1>
           </div>
           <div class="card-body">
-            <form method="post" accept-charset="utf-8">
+            <form id="form" method="post" accept-charset="utf-8">
               <div class="row">
                 <div class="col-md-6 form-group" style="text-align: center">
                   <label><b>Select location 👇</b></label>
@@ -94,18 +94,18 @@
       }
 
       function send_data() {
-        document.querySelector("form").addEventListener("submit", form_handler);
-
-        var fd = new FormData(document.querySelector("form"));
+        document.querySelector("#form").addEventListener("submit", form_handler);
+        var fd = new FormData(document.querySelector("#form"));
+        console.log(fd)
         var xhr = new XMLHttpRequest();
         xhr.open("POST","/predict", true);
 
-        document.getElementById("prediction").innerHTML =
+        document.querySelector("#prediction").innerHTML =
           "Wait Predicting Price!!";
 
         xhr.onreadystatechange = function () {
           if (xhr.readyState == XMLHttpRequest.DONE) {
-            document.getELementById("prediction").innerHTML = "Prediction: ₹ " + xhr.responseText;
+            document.getElementById("prediction").innerHTML = "Prediction: ₹ " + xhr.responseText;
           }
         };
 

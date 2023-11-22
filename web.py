@@ -1,6 +1,8 @@
 from flask import Flask,render_template,request
 import pandas as pd
 import pickle
+import numpy as np
+
 pipe = pickle.load(open("LRmodel.pkl",'rb'))
 app = Flask(__name__)
 data = pd.read_csv("cleaned_data.csv")
@@ -20,11 +22,11 @@ def predict():
     sqft =request.form.get('total_sqft')
 
     print(location,bhk,bath,sqft)
-    input = pd.DataFrame([[location, sqft, bath, bhk]],columns=['location', 'total_sqft', 'bath', 'bhk'])
+    input = pd.DataFrame([[location, sqft, bath, bhk]],columns=['location', 'total_sqft', 'bath', 'BHK'])
 
-    prediction = pipe.predict(input) [8]
+    prediction = pipe.predict(input) [0] *1e5
 
-    return str(prediction)
+    return str(np.round(prediction,2))
 
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
